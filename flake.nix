@@ -12,7 +12,8 @@
 
   outputs = { self,
               nixpkgs,
-              mkWindowsApp,
+              #erosanix,
+              erosanix.packages.x86_64-linux.mkWindowsApp,
               ... }:
 
     let
