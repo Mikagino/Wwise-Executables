@@ -17,7 +17,7 @@
               ... }:
 
     let
-
+      wine = pkgs.wineWow64Packages.base;
       pkgs = import nixpkgs {
         system = "x86_64-linux";
         overlays = [ self.overlays.default ];
