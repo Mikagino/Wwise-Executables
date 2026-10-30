@@ -70,7 +70,7 @@
         };
       };
 
-      lib.mkBlender = mkBlender;
+      lib.mkWwise= mkWwise;
 
       packages.x86_64-linux = rec {
         inherit (pkgs)
