@@ -13,7 +13,6 @@
   outputs = { self,
               nixpkgs,
               erosanix,
-              lib,
               ... }:
 
     let
@@ -53,7 +52,7 @@
             runHook postInstall
           '';
 
-          meta = with lib; {
+          meta = {
             description = "An audio authoring application for the development of interactive media.";
             homepage = "https://www.audiokinetic.com/en/wwise/";
             platforms = [ "x86_64-linux" ];
