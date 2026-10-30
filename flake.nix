@@ -13,7 +13,6 @@
   outputs = { self,
               nixpkgs,
                erosanix,
-               mkWindowsApp,
               ... }:
 
     let
@@ -24,8 +23,9 @@
       };
 
       mkWwise = { pname, version, src }:
-        #with pkgs;
-        erosanix.packages.x86_64-linux.mkWindowsApp rec {
+        with (erosanix.packages.x86_64-linux // erosanix.lib.x86_64-linux);
+        inherit mkWindowsApp;
+        mkWindowsApp rec {
           inherit pname version src wine;
 
           dontUnpack = false;
