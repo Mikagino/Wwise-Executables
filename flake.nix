@@ -24,7 +24,7 @@
 
       mkWwise = { pname, version, src }:
         #with pkgs;
-        erosanix.packages.x86_64-linux.mkWindowsApp.mkWindowsApp rec {
+        erosanix.packages.x86_64-linux.mkWindowsApp rec {
           inherit pname version src wine;
 
           dontUnpack = false;
