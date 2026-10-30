@@ -10,7 +10,10 @@
     erosanix.url = "github:emmanuelrosa/erosanix";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self,
+              nixpkgs,
+              mkWindowsApp,
+              ... }:
 
     let
 
