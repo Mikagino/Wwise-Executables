@@ -12,8 +12,8 @@
 
   outputs = { self,
               nixpkgs,
-              #erosanix,
               erosanix,
+              lib,
               ... }:
 
     let
