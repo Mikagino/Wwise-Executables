@@ -16,50 +16,50 @@
               ... }:
 
     let
-      wine = pkgs.wineWow64Packages.base;
       pkgs = import nixpkgs {
         system = "x86_64-linux";
         overlays = [ self.overlays.default ];
       };
 
       mkWwise = { pname, version, src }:
-        with (erosanix.packages.x86_64-linux // erosanix.lib.x86_64-linux);
-        inherit mkWindowsApp;
-        mkWindowsApp rec {
-          inherit pname version src wine;
+        with (pkgs // erosanix.packages.x86_64-linux // erosanix.lib.x86_64-linux);{
+          inherit mkWindowsApp;
+          wine = wineWow64Packages.base;
+          mkWindowsApp rec {
+            inherit pname version src wine;
 
-          dontUnpack = false;
-          wineArch = "win64";
-          enableInstallNotification = true; # notification when installing (necessary?)
-          persistRuntimeLayer = false;
-          inputHashMethod = "store-path";
-          enableVulkan = false;
-          graphicsDriver = "auto";
-          inhibitIdle = false; # enable sleep-blocking
+            dontUnpack = false;
+            wineArch = "win64";
+            enableInstallNotification = true; # notification when installing (necessary?)
+            persistRuntimeLayer = false;
+            inputHashMethod = "store-path";
+            enableVulkan = false;
+            graphicsDriver = "auto";
+            inhibitIdle = false; # enable sleep-blocking
 
-          winAppInstall = ''
-            d="$WINEPREFIX/drive_c/${pname}"
-            mkdir -p "$d"
-            tar xf ${src} --directory "$d"
-          '';
-          
-          winAppRun = ''
-            wine "$WINEPREFIX/drive_c/${pname}/Authoring/x64/Release/bin/Wwise.exe" "$ARGS"
-          '';
+            winAppInstall = ''
+              d="$WINEPREFIX/drive_c/${pname}"
+              mkdir -p "$d"
+              tar xf ${src} --directory "$d"
+            '';
 
-          installPhase = ''
-            runHook preInstall
-            ln -s $out/bin/.launcher $out/bin/${pname}
-            runHook postInstall
-          '';
+            winAppRun = ''
+              wine "$WINEPREFIX/drive_c/${pname}/Authoring/x64/Release/bin/Wwise.exe" "$ARGS"
+            '';
 
-          meta = {
-            description = "An audio authoring application for the development of interactive media.";
-            homepage = "https://www.audiokinetic.com/en/wwise/";
-            platforms = [ "x86_64-linux" ];
+            installPhase = ''
+              runHook preInstall
+              ln -s $out/bin/.launcher $out/bin/${pname}
+              runHook postInstall
+            '';
+
+            meta = {
+              description = "An audio authoring application for the development of interactive media.";
+              homepage = "https://www.audiokinetic.com/en/wwise/";
+              platforms = [ "x86_64-linux" ];
+            };
           };
         };
-
     in {
 
       # ----- Defines all the available versions for download as overlays -----
