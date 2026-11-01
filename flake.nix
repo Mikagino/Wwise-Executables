@@ -55,7 +55,7 @@
 
       overlays.default = final: prev: {
         wwise_2026_1_3_9276 = mkWwise {
-          pname = "wwise-bin";
+          pname = "wwise";
           version = "2026.1.3.9276";
           src = pkgs.fetchurl {
             url = "https://github.com/Mikagino/Wwise-Executables/releases/download/Wwise2026.1.3.9276/Wwise2026.1.3.9276.tar.xz";
