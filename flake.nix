@@ -12,7 +12,6 @@
         overlays = [ self.overlays.default ];
       };
 
-      # icoutils = pkgs.icoutils;
       #wwisePath = "/Authoring/x64/Release/bin/Wwise.exe";
 
       mkWwise = { pname, version, src }:
@@ -21,23 +20,35 @@
         stdenv.mkDerivation rec {
           inherit pname version src;
 
-          # 1. Extract icon
-          # 2. Move .desktop
+          buildInputs = [
+            pkgs.icoutils
+          ];
+
+          # 1. Extract icon from .exe
+          # 2. Move .desktop to store
+          # 3. Move rest to bin
           installPhase =
             ''
+              runHook preInstall
 
+              mkdir -p $out/share/icons/hicolor/scalable/apps
+              wrestool -xt14 ./Authoring/x64/Release/bin/Wwise.exe -o $out/share/icons/hicolor/scalable/apps/Wwise.svg 
+              
+              mkdir -p $out/share/applications
+              mv ./*.desktop $out/share/applications/
+
+              mkdir $out/bin
+              mv ./* $out/bin
+
+              runHook postInstall
             '';
-              # mkdir -p $out/share/icons/hicolor/scalable/apps
-              # wrestool -xt14 $out/Authoring/x64/Release/bin/Wwise.exe -o $out/share/icons/hicolor/scalable/apps/wwise.svg 
-              # mkdir -p $out/share/applications
-              # mv ./${pname}.${version}.desktop $out/share/applications/${pname}.${version}.desktop
 
-          #   meta = {
-          #   description = "An audio authoring application for the development of interactive media (upstream binaries).";
-          #   homepage = "https://www.audiokinetic.com/en/wwise/overview/";
-          #   #maintainers = [];
-          #   #platforms = [ pkgs.stdenv.hostPlatform.system ];
-          # };
+          meta = {
+            description = "An audio authoring application for the development of interactive media (upstream binaries).";
+            homepage = "https://www.audiokinetic.com/en/wwise/overview/";
+            maintainers = [];
+            platforms = [ pkgs.stdenv.hostPlatform.system ];
+          };
         };
 
     in {
@@ -46,9 +57,9 @@
         wwise_2026_1_3_9276 = mkWwise {
           pname = "wwise-bin";
           version = "2026.1.3.9276";
-          src = import pkgs.fetchurl {
+          src = pkgs.fetchurl {
             url = "https://github.com/Mikagino/Wwise-Executables/releases/download/Wwise2026.1.3.9276/Wwise2026.1.3.9276.tar.xz";
-            hash = "sha256:e981161831b322f4d3edee3d245720fd44f4aba7282217be457bd43778acffae";
+            hash = "sha256:ec97fd96b8039cc180f3da9384da87f16cd9c21383e4ed1f24aa53ec69161e2c";
           };
         };
       };
